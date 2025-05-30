@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-db
+    environment:
+      MYSQL_DATABASE: Webapp
+      MYSQL_ROOT_PASSWORD: @Coding1@
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  webapp:
+    build: .
+    container_name: spring-webapp
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/Webapp?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: @Coding1@
+      JWT_SECRET: java
+      JWT_EXPIRATION: 3600
+
+volumes:
+  db_data:
